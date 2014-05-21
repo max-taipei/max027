@@ -148,6 +148,86 @@ public class Player {
         return 神廟區;
     }
 
+    public Points get額外用於建造軍事單位的資源() {
+        return 額外用於建造軍事單位的資源;
+    }
+
+    public void set額外用於建造軍事單位的資源(Points 額外用於建造軍事單位的資源) {
+        this.額外用於建造軍事單位的資源 = 額外用於建造軍事單位的資源;
+    }
+
+    public List<AgesCard> get未分類區() {
+        return 未分類區;
+    }
+
+    public void set未分類區(List<AgesCard> 未分類區) {
+        this.未分類區 = 未分類區;
+    }
+
+    public List<AgesCard> get騎兵區() {
+        return 騎兵區;
+    }
+
+    public void set騎兵區(List<AgesCard> 騎兵區) {
+        this.騎兵區 = 騎兵區;
+    }
+
+    public List<AgesCard> get炮兵區() {
+        return 炮兵區;
+    }
+
+    public void set炮兵區(List<AgesCard> 炮兵區) {
+        this.炮兵區 = 炮兵區;
+    }
+
+    public List<AgesCard> get飛機區() {
+        return 飛機區;
+    }
+
+    public void set飛機區(List<AgesCard> 飛機區) {
+        this.飛機區 = 飛機區;
+    }
+
+    public List<AgesCard> get劇院區() {
+        return 劇院區;
+    }
+
+    public void set劇院區(List<AgesCard> 劇院區) {
+        this.劇院區 = 劇院區;
+    }
+
+    public List<AgesCard> get圖書館區() {
+        return 圖書館區;
+    }
+
+    public void set圖書館區(List<AgesCard> 圖書館區) {
+        this.圖書館區 = 圖書館區;
+    }
+
+    public List<AgesCard> get競技場區() {
+        return 競技場區;
+    }
+
+    public void set競技場區(List<AgesCard> 競技場區) {
+        this.競技場區 = 競技場區;
+    }
+
+    public List<Integer> getWonderStages() {
+        return wonderStages;
+    }
+
+    public void setWonderStages(List<Integer> wonderStages) {
+        this.wonderStages = wonderStages;
+    }
+
+    public List<AgesCard> get行動牌區() {
+        return 行動牌區;
+    }
+
+    public void set行動牌區(List<AgesCard> 行動牌區) {
+        this.行動牌區 = 行動牌區;
+    }
+
     public List<AgesCard> get農場區() {
         return 農場區;
     }
@@ -262,15 +342,61 @@ public class Player {
                 System.out.println("目標卡名:" + card.getName());
 
                 switch (get行動牌暫存區().get(0).getId()) {
+                    //富饒之土
                     case 1013:
-                        System.out.println("處理1013富饒之土");
-                        
+                    case 1061:
+                    case 1025:
+                        System.out.println("處理富饒之土");
+                        if ((card.getTag().equals("農場")) || (card.getTag().equals("礦山"))) {
+                            System.out.println("正確的對象");
+                            if (get行動牌暫存區().get(0).getAge() + 1 > card.getCostStone()) {//如果減少>花費
+                                card.setTokenYellow(card.getTokenYellow() + 1);//黃點+1
+                                this.工人區_黃點.addPoints(-1);
+                            } else {
+                                System.out.println("此次花費:" + (card.getCostStone() - (get行動牌暫存區().get(0).getAge() + 1)));
+                                this.礦山區.get(0).setTokenBlue(礦山區.get(0).getTokenBlue() - (card.getCostStone() - (get行動牌暫存區().get(0).getAge() + 1)));//支付成本
+                                card.setTokenYellow(card.getTokenYellow() + 1);//黃點+1
+                                this.工人區_黃點.addPoints(-1);
+                            }
+                            get行動牌暫存區().remove(0);
+                        } else {
+                            System.out.println("錯誤的目標");
+                        }
                         break;
+                    //                        建築工地
+                    case 1017:
+                    case 1065:
+                    case 1132:
+                    case 1215:
+                        System.out.println("處理建築工地");
+                        switch (card.getTag()) {
+                            case "神廟":
+                            case "實驗室":
+                                System.out.println("正確的對象");
+                                if (get行動牌暫存區().get(0).getAge() + 1 > card.getCostStone()) {//如果減少>花費
+                                    card.setTokenYellow(card.getTokenYellow() + 1);//黃點+1
+                                    this.工人區_黃點.addPoints(-1);
+                                } else {
+                                    System.out.println("此次花費:" + (card.getCostStone() - (get行動牌暫存區().get(0).getAge() + 1)));
+                                    this.礦山區.get(0).setTokenBlue(礦山區.get(0).getTokenBlue() - (card.getCostStone() - (get行動牌暫存區().get(0).getAge() + 1)));//支付成本
+                                    card.setTokenYellow(card.getTokenYellow() + 1);//黃點+1
+                                    this.工人區_黃點.addPoints(-1);
+                                }
+                                get行動牌暫存區().remove(0);
+                                break;
+
+                            default:
+                                System.out.println("錯誤的目標");
+                                break;
+                        }
+                    
                     default:
                         System.out.println("待處理中");
+                        break;
                 }
+
             }
-            System.out.println("your assigned ID " + id + " IS NOT FOUND???");
+//            System.out.println("your assigned ID " + id + " IS NOT FOUND???");
         }
     }
 
@@ -331,6 +457,8 @@ public class Player {
     private Points 科技生產_當回合;
     private Points 軍力;
     private Points 資源庫_藍點;
+    private Points 額外用於建造軍事單位的資源;
+
     private Points 人力庫_黃點;
     private Points 笑臉_幸福指數;
     private Points 工人區_黃點;
@@ -735,6 +863,25 @@ public class Player {
         內政點數.setVal(內政手牌上限.getVal());
         軍事點數.setVal(軍事手牌上限.getVal());
 
+    }
+
+    public void actActV1() {
+        switch (get行動牌暫存區().get(0).getId()) {
+                    //富饒之土
+                    case 1027:
+                    case 1092:
+                    case 1171:
+                    case 1243:
+                        System.out.println("處理藝術作品");
+                        System.out.println(文化);
+                        this.文化.addPoints(6-get行動牌暫存區().get(0).getAge());
+                        System.out.println(文化);
+                        get行動牌暫存區().remove(0);
+                        break;
+                    default:
+                        System.out.println("使用方式不正確");
+                        break;
+        }
     }
 
 }

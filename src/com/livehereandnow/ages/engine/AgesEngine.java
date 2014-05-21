@@ -196,6 +196,8 @@ public class AgesEngine {
 //            case "d"://v0.59
 //            case "debug"://v0.59
 //                return core.doDebug();
+                case "act":
+                return actActV1();
             case "list":
                 return doList();
             case "start":
@@ -633,6 +635,14 @@ public class AgesEngine {
     private boolean doServer() {
         String idx13 = field.getServerStatus();
         server.updateGameLiveCardRow(idx13);
+
+        return true;
+    }
+
+    private boolean actActV1() {
+              System.out.println("執行行動牌");
+//           System.out.println(field.getCurrentPlayer().get行動牌暫存區().get(0).getName()+"  效果:"+field.getCurrentPlayer().get行動牌暫存區().get(0).getAction());
+                 field.getCurrentPlayer().actActV1();
 
         return true;
     }
